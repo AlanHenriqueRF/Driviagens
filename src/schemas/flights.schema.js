@@ -11,3 +11,4 @@ export const flightsSchema = joi.object({
     date: joi.date().format('DD-MM-YYYY').greater('now').required()
 })
 
+export const dataSchema = joi.date().format('DD-MM-YYYY').required()
