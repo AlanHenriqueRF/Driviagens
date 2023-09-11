@@ -1,17 +1,15 @@
 import httpStatus from "http-status";
 import { postTravel, verifyFlight, verifyPassger } from "../repositories/travel.repository.js";
+import { serviceTravel } from "../services/travels.service.js";
 
 export async function NewTravel(req, res) {
+    const { passengerId, flightId } = req.body
     try {
-        const { passengerId, flightId } = req.body
-        const existPassenger = await verifyPassger(passengerId);
-        const existFlight = await verifyFlight(flightId);
-
-        if (existFlight.rowCount === 0 || existPassenger.rowCount === 0) return res.sendStatus(404);
-        await postTravel(passengerId, flightId);
+        await serviceTravel.NewTravel(passengerId,flightId)
         res.sendStatus(httpStatus.CREATED);
 
     } catch (err) {
+        if (err.type === 'not found') return res.status(httpStatus.NOT_FOUND).send(err.message)
         res.status(httpStatus.INTERNAL_SERVER_ERROR).send(err.message)
     }
 }
