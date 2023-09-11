@@ -1,10 +1,11 @@
 import httpStatus from "http-status";
 import { getpassTravel, postPassenger } from "../repositories/passenger.repositoy.js"
+import { servicePassenger } from "../services/passenger.service.js";
 
 export async function NewPassenger(req, res) {
+    const { firstName, lastName } = req.body
     try {
-        const { firstName, lastName } = req.body
-        await postPassenger(firstName, lastName);
+        await servicePassenger.NewPassenger(firstName,lastName);
         res.sendStatus(httpStatus.CREATED);
 
     } catch (err) {
@@ -14,8 +15,7 @@ export async function NewPassenger(req, res) {
 
 export async function getallPassgenrsTravels(req,res){
     try{
-        const lista = (await getpassTravel()).rows
-        console.log(lista)
+        const lista = await servicePassenger.getallPassgenrsTravels();
         res.status(httpStatus.OK).send(lista)
     }catch(err){
         res.status(httpStatus.INTERNAL_SERVER_ERROR).send(err.message)
