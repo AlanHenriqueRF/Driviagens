@@ -1,4 +1,5 @@
 import { existCity, postFlight, takeallFlights } from "../repositories/flight.repository.js";
+import httpStatus from "http-status";
 
 export async function newflight(req, res) {
     try {
@@ -10,20 +11,19 @@ export async function newflight(req, res) {
 
         destination_exists = !destination_exists
 
-        if (origin_exists || destination_exists) return res.sendStatus(404)
-        if (origin === destination) return res.sendStatus(409);
+        if (origin_exists || destination_exists) return res.sendStatus(httpStatus.NOT_FOUND)
+        if (origin === destination) return res.sendStatus(httpStatus.CONFLICT);
 
         await postFlight(origin, destination, date);
-        res.sendStatus(201);
+        res.sendStatus(httpStatus.CREATED);
 
     } catch (err) {
-        res.status(500).send(err.message)
+        res.status(httpStatus.INTERNAL_SERVER_ERROR).send(err.message)
     }
 }
 
 export async function takeFlights(req, res) {
     const { origin, destination, BigDate, SmallDate } = res.locals.Queries
-
 
     try {
         let lista = (await takeallFlights()).rows
@@ -42,8 +42,8 @@ export async function takeFlights(req, res) {
             const newlist = lista.filter((i) => new Date(i.date) < dataBig && new Date(i.date) > dataSmal  )
             lista = newlist
         }
-        res.status(200).send(lista)
+        res.status(httpStatus.OK).send(lista)
     } catch (err) {
-        res.status(500).send(err.message)
+        res.status(httpStatus.INTERNAL_SERVER_ERROR).send(err.message)
     }
 }

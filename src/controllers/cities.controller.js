@@ -1,16 +1,14 @@
-import { postCity, verifyCity } from "../repositories/cities.repository.js";
+import httpStatus from "http-status";
+import { citiesService } from "../services/cities.service.js";
 
 export async function NewCity(req, res) {
+    const { name } = req.body
     try {
-        const { name } = req.body
-        const lista = await verifyCity(name)
-
-        if (lista.rowCount > 0) return res.sendStatus(409)
-
-        await postCity(name);
-        res.sendStatus(201);
+        await citiesService.cityService(name)
+        res.sendStatus(httpStatus.CREATED);
 
     } catch (err) {
-        res.status(500).send(err.message)
+        if (err.type==='conflict') return res.status(httpStatus.CONFLICT).send(err.message)
+        res.status(httpStatus.INTERNAL_SERVER_ERROR).send(err.message)
     }
 }

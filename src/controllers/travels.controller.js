@@ -1,3 +1,4 @@
+import httpStatus from "http-status";
 import { postTravel, verifyFlight, verifyPassger } from "../repositories/travel.repository.js";
 
 export async function NewTravel(req, res) {
@@ -8,9 +9,9 @@ export async function NewTravel(req, res) {
 
         if (existFlight.rowCount === 0 || existPassenger.rowCount === 0) return res.sendStatus(404);
         await postTravel(passengerId, flightId);
-        res.sendStatus(201);
+        res.sendStatus(httpStatus.CREATED);
 
     } catch (err) {
-        res.status(500).send(err.message)
+        res.status(httpStatus.INTERNAL_SERVER_ERROR).send(err.message)
     }
 }
