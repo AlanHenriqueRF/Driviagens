@@ -23,17 +23,17 @@ export function getpassTravel() {
 export function getpassTravelWithName(name) {
     return db.query(`
     SELECT 
-    passengers."firstName" || ' ' || passengers."lastName" AS passenger,
-    COUNT(travels."passengerId") AS travels
-FROM 
-    passengers
-LEFT JOIN 
-    travels ON passengers.id = travels."passengerId"
-WHERE 
-passengers ILIKE $1
-GROUP BY 
-    passengers.id, passengers."firstName", passengers."lastName"
-ORDER BY 
-    travels DESC;
+        passengers."firstName" || ' ' || passengers."lastName" AS passenger,
+        COUNT(travels."passengerId") AS travels
+    FROM 
+        passengers
+    LEFT JOIN 
+        travels ON passengers.id = travels."passengerId"
+    WHERE
+        passengers ILIKE '%$1%'
+    GROUP BY 
+        passengers.id, passengers."firstName", passengers."lastName"
+    ORDER BY 
+        travels DESC
 `, [name])
 }
