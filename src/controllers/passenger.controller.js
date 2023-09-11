@@ -14,8 +14,9 @@ export async function NewPassenger(req, res) {
 }
 
 export async function getallPassgenrsTravels(req,res){
+    const name = req.query.name
     try{
-        const lista = await servicePassenger.getallPassgenrsTravels();
+        const lista = await servicePassenger.getallPassgenrsTravels(name);
         res.status(httpStatus.OK).send(lista)
     }catch(err){
         res.status(httpStatus.INTERNAL_SERVER_ERROR).send(err.message)

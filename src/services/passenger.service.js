@@ -1,12 +1,15 @@
-import httpStatus from "http-status";
-import { getpassTravel, postPassenger } from "../repositories/passenger.repositoy.js"
+
+import { getpassTravel, getpassTravelWithName, postPassenger } from "../repositories/passenger.repositoy.js"
 
 export async function NewPassenger(firstName, lastName) {
     await postPassenger(firstName, lastName);
 }
 
-export async function getallPassgenrsTravels(req, res) {
-    return (await getpassTravel()).rows
+export async function getallPassgenrsTravels(name) {
+    if (!name){
+        return (await getpassTravel()).rows
+    } 
+    return (await getpassTravelWithName(name)).rows
     
 }
 
