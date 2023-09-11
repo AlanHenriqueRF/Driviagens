@@ -3,7 +3,6 @@ import { postTravel, verifyFlight, verifyPassger } from "../repositories/travel.
 export async function NewTravel(req, res) {
     try {
         const { passengerId, flightId } = req.body
-        console.log(passengerId)
         const existPassenger = await verifyPassger(passengerId);
         const existFlight = await verifyFlight(flightId);
 
